@@ -7,6 +7,9 @@
 
 namespace Tunnel\Kernel;
 
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Class ParentKernel
  *
@@ -15,5 +18,15 @@ namespace Tunnel\Kernel;
  */
 class ParentKernel extends AbstractKernel
 {
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @param EventDispatcherInterface $dispatcher
+     *
+     * @return void
+     */
+    public function onEvent(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+    {
 
+    }
 }

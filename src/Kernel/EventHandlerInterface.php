@@ -11,12 +11,12 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class ChildKernel
+ * Interface EventHandlerInterface
  *
  * @package Tunnel\Kernel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class ChildKernel extends AbstractKernel
+interface EventHandlerInterface
 {
     /**
      * @param Event $event
@@ -25,8 +25,5 @@ class ChildKernel extends AbstractKernel
      *
      * @return void
      */
-    public function onEvent(Event $event, $eventName, EventDispatcherInterface $dispatcher)
-    {
-
-    }
+    public function onEvent(Event $event, $eventName, EventDispatcherInterface $dispatcher);
 }

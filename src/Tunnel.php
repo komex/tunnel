@@ -7,7 +7,10 @@
 
 namespace Tunnel;
 
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tunnel\Kernel\ChildKernel;
+use Tunnel\Kernel\EventHandlerInterface;
 use Tunnel\Kernel\KernelInterface;
 use Tunnel\Kernel\ParentKernel;
 
@@ -17,7 +20,7 @@ use Tunnel\Kernel\ParentKernel;
  * @package Tunnel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class Tunnel
+class Tunnel implements EventHandlerInterface
 {
     /**
      * @var int
@@ -42,11 +45,39 @@ class Tunnel
     }
 
     /**
+     * @param EventDispatcherInterface $dispatcher
+     * @param array $events
+     */
+    public function registerListener(EventDispatcherInterface $dispatcher, array $events)
+    {
+        $this->checkTunnelStopped();
+        foreach ($events as $event) {
+            $priority = 0;
+            if (is_array($event)) {
+                list($event, $priority) = $event;
+            }
+            $dispatcher->addListener($event, [$this, 'onEvent'], $priority);
+        }
+    }
+
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @param EventDispatcherInterface $dispatcher
+     *
+     * @return void
+     */
+    public function onEvent(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+    {
+        $this->kernel->onEvent($event, $eventName, $dispatcher);
+    }
+
+    /**
      * Call after pcntl_fork().
      */
     public function gap()
     {
-        $this->checkTunnelStatus();
+        $this->checkTunnelStopped();
         $currentPID = getmypid();
         list($parentHandler, $childHandler) = $this->bridge;
         if ($currentPID === $this->parentPID) {
@@ -68,16 +99,16 @@ class Tunnel
      */
     public function reset()
     {
-        $this->checkTunnelStatus();
+        $this->checkTunnelStopped();
         $this->parentPID = getmypid();
     }
 
     /**
-     * Throw exception if tunnel is already in work.
+     * Throw exception if tunnel is not work.
      *
      * @throws \LogicException
      */
-    private function checkTunnelStatus()
+    private function checkTunnelStopped()
     {
         if ($this->bridge === null) {
             throw new \LogicException('Tunnel is already worked.');

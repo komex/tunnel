@@ -14,7 +14,7 @@ namespace Tunnel\Kernel;
  * @package Tunnel\Kernel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-interface KernelInterface
+interface KernelInterface extends EventHandlerInterface
 {
     /**
      * @param resource $handler

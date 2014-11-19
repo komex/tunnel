@@ -13,7 +13,7 @@ namespace Tunnel\Kernel;
  * @package Tunnel\Kernel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class AbstractKernel implements KernelInterface
+abstract class AbstractKernel implements KernelInterface
 {
     /**
      * @var resource
