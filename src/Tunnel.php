@@ -48,14 +48,16 @@ class Tunnel
     {
         $this->checkTunnelStatus();
         $currentPID = getmypid();
+        list($parentHandler, $childHandler) = $this->bridge;
         if ($currentPID === $this->parentPID) {
             $kernel = new ParentKernel();
-            list($handler) = $this->bridge;
+            $kernel->setHandler($parentHandler);
+            fclose($childHandler);
         } else {
             $kernel = new ChildKernel();
-            list(, $handler) = $this->bridge;
+            $kernel->setHandler($childHandler);
+            fclose($parentHandler);
         }
-        $kernel->setHandler($handler);
         $this->kernel = $kernel;
         $this->bridge = null;
     }
@@ -89,7 +91,7 @@ class Tunnel
      */
     private function createBridge()
     {
-        $pair = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_RAW);
+        $pair = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
         list($parentSocket, $childSocket) = $pair;
         if ($parentSocket === null || $childSocket === null) {
             throw new \RuntimeException(
