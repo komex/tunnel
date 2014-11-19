@@ -7,6 +7,7 @@
 
 namespace Tunnel\Kernel;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface KernelInterface
@@ -22,4 +23,11 @@ interface KernelInterface extends EventHandlerInterface
      * @return $this
      */
     public function setHandler($handler);
+
+    /**
+     * @param EventDispatcherInterface[] $dispatchers
+     *
+     * @return $this
+     */
+    public function setDispatchers(array $dispatchers);
 }

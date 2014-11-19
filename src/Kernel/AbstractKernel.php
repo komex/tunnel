@@ -7,6 +7,8 @@
 
 namespace Tunnel\Kernel;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Class AbstractKernel
  *
@@ -19,6 +21,10 @@ abstract class AbstractKernel implements KernelInterface
      * @var resource
      */
     protected $handler;
+    /**
+     * @var EventDispatcherInterface[]
+     */
+    protected $dispatchers;
 
     /**
      * @param resource $handler
@@ -28,5 +34,34 @@ abstract class AbstractKernel implements KernelInterface
     public function setHandler($handler)
     {
         $this->handler = $handler;
+
+        return $this;
+    }
+
+    /**
+     * @param EventDispatcherInterface[] $dispatchers
+     *
+     * @return $this
+     */
+    public function setDispatchers(array $dispatchers)
+    {
+        $this->dispatchers = $dispatchers;
+
+        return $this;
+    }
+
+    /**
+     * @param EventDispatcherInterface $dispatcher
+     *
+     * @return int
+     */
+    protected function getDispatcherId(EventDispatcherInterface $dispatcher)
+    {
+        foreach ($this->dispatchers as $index => $registeredDispatcher) {
+            if ($dispatcher === $registeredDispatcher) {
+                return $index;
+            }
+        }
+        throw new \InvalidArgumentException('Dispatcher not registered.');
     }
 }

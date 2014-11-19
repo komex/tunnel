@@ -34,6 +34,10 @@ class Tunnel implements EventHandlerInterface
      * @var KernelInterface
      */
     private $kernel;
+    /**
+     * @var EventDispatcherInterface[]
+     */
+    private $dispatchers = [];
 
     /**
      * Init Tunnel.
@@ -58,6 +62,7 @@ class Tunnel implements EventHandlerInterface
             }
             $dispatcher->addListener($event, [$this, 'onEvent'], $priority);
         }
+        array_push($this->dispatchers, $dispatcher);
     }
 
     /**
@@ -69,7 +74,9 @@ class Tunnel implements EventHandlerInterface
      */
     public function onEvent(Event $event, $eventName, EventDispatcherInterface $dispatcher)
     {
-        $this->kernel->onEvent($event, $eventName, $dispatcher);
+        if ($this->kernel !== null) {
+            $this->kernel->onEvent($event, $eventName, $dispatcher);
+        }
     }
 
     /**
@@ -89,8 +96,10 @@ class Tunnel implements EventHandlerInterface
             $kernel->setHandler($childHandler);
             fclose($parentHandler);
         }
+        $kernel->setDispatchers($this->dispatchers);
         $this->kernel = $kernel;
         $this->bridge = null;
+        $this->dispatchers = [];
     }
 
 
