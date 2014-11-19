@@ -7,19 +7,26 @@
 
 namespace Tunnel\Kernel;
 
-
 /**
- * Interface KernelInterface
+ * Class AbstractKernel
  *
  * @package Tunnel\Kernel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-interface KernelInterface
+class AbstractKernel implements KernelInterface
 {
+    /**
+     * @var resource
+     */
+    protected $handler;
+
     /**
      * @param resource $handler
      *
      * @return $this
      */
-    public function setHandler($handler);
+    public function setHandler($handler)
+    {
+        $this->handler = $handler;
+    }
 }

@@ -49,10 +49,15 @@ class Tunnel
         $this->checkTunnelStatus();
         $currentPID = getmypid();
         if ($currentPID === $this->parentPID) {
-            $this->kernel = new ParentKernel();
+            $kernel = new ParentKernel();
+            list($handler) = $this->bridge;
         } else {
-            $this->kernel = new ChildKernel();
+            $kernel = new ChildKernel();
+            list(, $handler) = $this->bridge;
         }
+        $kernel->setHandler($handler);
+        $this->kernel = $kernel;
+        $this->bridge = null;
     }
 
 

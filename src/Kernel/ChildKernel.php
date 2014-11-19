@@ -13,7 +13,7 @@ namespace Tunnel\Kernel;
  * @package Tunnel\Kernel
  * @author Andrey Kolchenko <andrey@kolchenko.me>
  */
-class ChildKernel implements KernelInterface
+class ChildKernel extends AbstractKernel
 {
 
 }
