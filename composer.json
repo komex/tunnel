@@ -1,0 +1,12 @@
+{
+    "name": "komex/tunnel",
+    "description": "Interprocess events",
+    "minimum-stability": "stable",
+    "license": "CC-BY-SA-4.0",
+    "authors": [
+        {
+            "name": "Andrey Kolchenko",
+            "email": "andrey@kolchenko.me"
+        }
+    ]
+}
