@@ -8,5 +8,21 @@
             "name": "Andrey Kolchenko",
             "email": "andrey@kolchenko.me"
         }
-    ]
+    ],
+    "support": {
+        "email": "andrey@kolchenko.me",
+        "issues": "https://github.com/komex/tunnel/issues",
+        "source": "https://github.com/komex/tunnel.git"
+    },
+    "require": {
+        "php": ">=5.4",
+        "ext-sysvmsg": "*",
+        "symfony/event-dispatcher": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tunnel\\": "src/",
+            "Test\\Tunnel\\": "tests/"
+        }
+    }
 }
