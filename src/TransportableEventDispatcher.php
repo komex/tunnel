@@ -34,7 +34,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function dispatch($eventName, Event $event = null)
     {
-        // TODO: Implement dispatch() method.
+
     }
 
     /**
@@ -49,7 +49,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function addListener($eventName, $listener, $priority = 0)
     {
-        // TODO: Implement addListener() method.
+
     }
 
     /**
@@ -64,7 +64,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function addSubscriber(EventSubscriberInterface $subscriber)
     {
-        // TODO: Implement addSubscriber() method.
+
     }
 
     /**
@@ -75,7 +75,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function removeListener($eventName, $listener)
     {
-        // TODO: Implement removeListener() method.
+
     }
 
     /**
@@ -85,7 +85,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function removeSubscriber(EventSubscriberInterface $subscriber)
     {
-        // TODO: Implement removeSubscriber() method.
+
     }
 
     /**
@@ -97,7 +97,7 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function getListeners($eventName = null)
     {
-        // TODO: Implement getListeners() method.
+
     }
 
     /**
@@ -109,6 +109,6 @@ class TransportableEventDispatcher implements EventDispatcherInterface
      */
     public function hasListeners($eventName = null)
     {
-        // TODO: Implement hasListeners() method.
+
     }
 }
