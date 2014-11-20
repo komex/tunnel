@@ -74,11 +74,7 @@ class Tunnel
     {
         $this->checkTunnelStopped();
         foreach ($events as $event) {
-            $priority = 0;
-            if (is_array($event) === true) {
-                list($event, $priority) = $event;
-            }
-            $dispatcher->addListener($event, [$this, 'onEvent'], $priority);
+            $dispatcher->addListener($event, [$this, 'onEvent']);
         }
         array_push($this->dispatchers, $dispatcher);
     }
