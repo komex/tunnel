@@ -17,6 +17,7 @@
     "require": {
         "php": ">=5.4",
         "ext-sysvmsg": "*",
+        "ext-posix": "*",
         "symfony/event-dispatcher": "2.*"
     },
     "autoload": {
