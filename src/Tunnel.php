@@ -95,6 +95,7 @@ class Tunnel
         if ($this->opponentPID === null) {
             return;
         }
+        $event->setDispatcher(new TransportableEventDispatcher());
         $serialized = serialize($event);
         $sendData = pack('S', strlen($eventName)) . $eventName .
             pack('N', strlen($serialized)) . $serialized .
@@ -114,22 +115,13 @@ class Tunnel
             return;
         }
         while (msg_receive($this->queue, $this->currentPID, $subscriberPID, 128, $opponentPID, false, MSG_IPC_NOWAIT)) {
-            try {
-                if ($this->currentPID !== $subscriberPID) {
-                    continue;
-                }
-                if ($this->opponentPID === null) {
-                    $this->opponentPID = intval($opponentPID);
-                } else {
-                    list($eventName, $event, $dispatcherId) = $this->receiveMessage($this->bridge[$this->mode]);
-                    if ($event instanceof Event) {
-//                        $this->dispatchers[$dispatcherId]->dispatch($eventName, $event);
-                    }
-                }
-            } catch (\RuntimeException $exception) {
-                if ($exception->getCode() !== 1) {
-                    throw $exception;
-                }
+            if ($this->currentPID !== $subscriberPID) {
+                continue;
+            }
+            if ($this->opponentPID === null) {
+                $this->opponentPID = intval($opponentPID);
+            } else {
+                $this->processEvent($this->bridge[$this->mode]);
             }
         }
     }
@@ -147,6 +139,28 @@ class Tunnel
             $this->mode = self::MODE_CHILD;
             $this->opponentPID = $this->parentPID;
             $this->sendPollSignal();
+        }
+    }
+
+    /**
+     * @param resource $stream
+     *
+     * @throws \RuntimeException
+     */
+    private function processEvent($stream)
+    {
+        try {
+            list($eventName, $event, $dispatcherId) = $this->receiveMessage($stream);
+            if ($event instanceof Event) {
+                $dispatcher = $this->dispatchers[$dispatcherId];
+                $dispatcher->removeListener($eventName, [$this, 'onEvent']);
+                $dispatcher->dispatch($eventName, $event);
+                $dispatcher->addListener($eventName, [$this, 'onEvent']);
+            }
+        } catch (\RuntimeException $exception) {
+            if ($exception->getCode() !== 1) {
+                throw $exception;
+            }
         }
     }
 
